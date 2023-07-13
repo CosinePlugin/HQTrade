@@ -1,0 +1,55 @@
+prefix: "&6[ 거래 ]&f"
+
+# 인벤토리 정보
+inventory-info:
+  title: "&fડ"
+  buttons:
+    # 플레이어 X 버튼
+    player-x-button:
+      material: PAPER
+      display: "&c대기 상태"
+      #lore:
+        #- ""
+      custom-model-data: 1
+
+    # 플레이어 V 버튼
+    player-v-button:
+      material: PAPER
+      display: "&a준비 상태"
+      custom-model-data: 2
+
+    # 파트너 X 버튼
+    partner-x-button:
+      material: PAPER
+      display: "&c대기 상태"
+      custom-model-data: 1
+
+    # 파트너 V 버튼
+    partner-v-button:
+      material: PAPER
+      display: "&a준비 상태"
+      custom-model-data: 2
+
+    # 1만원 버튼
+    money-1-button:
+      material: PAPER
+      display: "&e1만원"
+      lore:
+        - "&7좌클릭&a(추가) &8/ &7우클릭&c(차감)"
+      custom-model-data: 3
+
+    # 10만원 버튼
+    money-10-button:
+      material: PAPER
+      display: "&e10만원"
+      lore:
+        - "&7좌클릭&a(추가) &8/ &7우클릭&c(차감)"
+      custom-model-data: 4
+
+    # 100만원 버튼
+    money-100-button:
+      material: PAPER
+      display: "&e100만원"
+      lore:
+        - "&7좌클릭&a(추가) &8/ &7우클릭&c(차감)"
+      custom-model-data: 5

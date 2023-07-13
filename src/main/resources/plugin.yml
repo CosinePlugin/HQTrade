@@ -1,0 +1,18 @@
+name: HQTrade
+version: 1.0.0
+api-version: 1.13
+main: kr.hqservice.trade.HQTrade
+authors: [ Cosine_A ]
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.8.0
+depend:
+  - Vault
+softdepend:
+  - MS-Core
+
+commands:
+  거래:
+    description: 거래 명령어입니다.
+  거래관리:
+    permission: op
+    description: 거래 관리 명령어입니다.
