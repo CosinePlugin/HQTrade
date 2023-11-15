@@ -40,6 +40,9 @@ class TradeConfig(
             val title = getString("title")?.applyColor() ?: "%partner%님과의 거래"
             inventoryInfoRegistry.setTitle(title)
 
+            val headCustomModelData = getInt("head-custom-model-data")
+            inventoryInfoRegistry.setHeadCustomModelData(headCustomModelData)
+
             getConfigurationSection("buttons")?.apply {
                 getKeys(false).forEach { key ->
                     getConfigurationSection(key)?.apply {

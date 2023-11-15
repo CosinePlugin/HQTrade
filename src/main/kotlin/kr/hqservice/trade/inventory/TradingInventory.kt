@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta
 
 class TradingInventory(
     title: String,
+    private val headCustomModelData: Int,
     override val playerTrade: Trade,
     override val partnerTrade: Trade,
     private val tradeButtonHolder: TradeButtonHolder,
@@ -45,7 +46,9 @@ class TradingInventory(
     private fun createHead(player: Player): ItemStack {
         return ItemStack(Material.PLAYER_HEAD).apply {
             itemMeta = (itemMeta as SkullMeta).apply {
-                setCustomModelData(1)
+                if (headCustomModelData != 0) {
+                    setCustomModelData(headCustomModelData)
+                }
                 setDisplayName("§f${player.name}")
                 owningPlayer = player
                 lore = listOf("§7금액: §e0원")

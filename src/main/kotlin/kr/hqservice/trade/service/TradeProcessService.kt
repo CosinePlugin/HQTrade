@@ -33,8 +33,9 @@ class TradeProcessService(
         trades[target.uniqueId] = targetTrade
 
         val title = inventoryInfoRegistry.getTitle()
-        val playerTradingInventory = TradingInventory(title, playerTrade, targetTrade, tradeButtonHolder, this)
-        val targetTradingInventory = TradingInventory(title, targetTrade, playerTrade, tradeButtonHolder, this)
+        val headCustomModelData = inventoryInfoRegistry.getHeadCustomModelData()
+        val playerTradingInventory = TradingInventory(title, headCustomModelData, playerTrade, targetTrade, tradeButtonHolder, this)
+        val targetTradingInventory = TradingInventory(title, headCustomModelData, targetTrade, playerTrade, tradeButtonHolder, this)
 
         playerTrade.setTradingInventory(playerTradingInventory)
         targetTrade.setTradingInventory(targetTradingInventory)
