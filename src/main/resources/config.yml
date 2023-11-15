@@ -3,7 +3,7 @@ prefix: "&6[ 거래 ]&f"
 # 인벤토리 정보
 inventory-info:
   title: "&fડ"
-  head-custom-model-data: 0
+  head-custom-model-data: 1
   buttons:
     # 플레이어 X 버튼
     player-x-button:
