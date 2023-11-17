@@ -78,10 +78,19 @@ class TradeProcessService(
     }
 
     fun failTrade(player: Player, partner: Player) {
-        plugin.later { partner.closeInventory() }
+        val playerUUID = player.uniqueId
+        val partnerUUID = partner.uniqueId
+
+        val playerTrade = trades[playerUUID] ?: return
+        val partnerTrade = trades[partnerUUID] ?: return
+
+        playerTrade.setTrading(true)
+        partnerTrade.setTrading(true)
 
         giveTradingItem(player, player, TradeSlotType.PLAYER.slots)
         giveTradingItem(partner, partner, TradeSlotType.PLAYER.slots)
+
+        partner.closeInventory()
 
         player.sendMessage("$prefix 거래를 취소하였습니다.")
         partner.sendMessage("$prefix ${player.name}님이 거래를 취소하였습니다.")

@@ -1,6 +1,8 @@
 package kr.hqservice.trade.inventory
 
+import kr.hqservice.trade.HQTrade.Companion.plugin
 import kr.hqservice.trade.enums.TradeSlotType
+import kr.hqservice.trade.extension.later
 import kr.hqservice.trade.inventory.container.TradeContainer
 import kr.hqservice.trade.service.TradeProcessService
 import kr.hqservice.trade.trade.Trade
@@ -24,9 +26,10 @@ class TradingInventory(
     private val tradeProcessService: TradeProcessService
 ) : TradeContainer(54, title, false) {
 
-    companion object {
-        private val preventClickTypes = arrayOf(ClickType.NUMBER_KEY, ClickType.SHIFT_LEFT)
-        private val preventActionType = InventoryAction.COLLECT_TO_CURSOR
+    private companion object {
+        val preventClickTypes = arrayOf(ClickType.NUMBER_KEY, ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT)
+        val preventActionType = InventoryAction.COLLECT_TO_CURSOR
+        val clickRegex = Regex("PLACE|PICKUP")
     }
 
     override fun init(inventory: Inventory) {
@@ -57,12 +60,12 @@ class TradingInventory(
     }
 
     override fun onClick(event: InventoryClickEvent) {
-        syncInventory()
-
         val slot = event.rawSlot
         val click = event.click
         val action = event.action
-
+        if (action.name.contains(clickRegex)) {
+            syncInventory()
+        }
         if (playerTrade.isFirstReady() || preventClickTypes.contains(click) || preventActionType == action) {
             event.isCancelled = true
         }
@@ -73,8 +76,10 @@ class TradingInventory(
 
     override fun onDrag(event: InventoryDragEvent) {
         val slots = event.rawSlots
-        if (slots.intersect(TradeSlotType.PARTNER.slots).isNotEmpty()) {
+        if (TradeSlotType.PARTNER.isIntersect(slots) || TradeSlotType.BACKGROUND.isIntersect(slots)) {
             event.isCancelled = true
+        } else {
+            syncInventory()
         }
     }
 
@@ -92,22 +97,24 @@ class TradingInventory(
     }
 
     private fun syncInventory() {
-        val playerTradingInventory = playerTrade.getTradingInventory() ?: return
-        val playerInventory = playerTradingInventory.inventory
+        plugin.later {
+            val playerTradingInventory = playerTrade.getTradingInventory() ?: return@later
+            val playerInventory = playerTradingInventory.inventory
 
-        val partnerTradingInventory = partnerTrade.getTradingInventory() ?: return
-        val partnerInventory = partnerTradingInventory.inventory
+            val partnerTradingInventory = partnerTrade.getTradingInventory() ?: return@later
+            val partnerInventory = partnerTradingInventory.inventory
 
-        val slots = TradeSlotType.PLAYER.slots
-        slots.forEach { slot ->
-            val proposerItem = inventory.getItem(slot)
-            val partnerSlot = slot + 4
-            partnerInventory.setItem(partnerSlot, proposerItem)
-        }
-        slots.forEach { slot ->
-            val partnerItem = partnerInventory.getItem(slot)
-            val partnerSlot = slot + 4
-            playerInventory.setItem(partnerSlot, partnerItem)
+            val slots = TradeSlotType.PLAYER.slots
+            slots.forEach { slot ->
+                val proposerItem = inventory.getItem(slot)
+                val partnerSlot = slot + 4
+                partnerInventory.setItem(partnerSlot, proposerItem)
+            }
+            slots.forEach { slot ->
+                val partnerItem = partnerInventory.getItem(slot)
+                val partnerSlot = slot + 4
+                playerInventory.setItem(partnerSlot, partnerItem)
+            }
         }
     }
 }
